@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAS OLIV-IN POMACE — ROI Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f4f5f3;color:#101a12;font-size:15px;line-height:1.65;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px 60px}
+.card{background:#fff;border:1px solid #dde5da;border-radius:10px;width:100%;max-width:920px;overflow:hidden;box-shadow:0 2px 18px rgba(0,0,0,0.07)}
+
+/* HEADER */
+.header{background:#fff;border-bottom:2px solid #0e2140;padding:20px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.header-logo img{height:58px;width:auto}
+.header-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.header-product{font-size:19px;font-weight:700;color:#0e2140;letter-spacing:0.3px}
+.header-product em{color:#0f9e7e;font-style:normal}
+.header-sub{font-size:10px;color:#6b7a8a;letter-spacing:2px;text-transform:uppercase}
+
+/* LANG SWITCHER */
+.lang-row{display:flex;gap:6px}
+.lang-btn{font-size:11px;font-weight:600;padding:4px 10px;border:1px solid #c5d0db;border-radius:4px;background:transparent;color:#6b7a8a;cursor:pointer;transition:all .15s;letter-spacing:0.5px}
+.lang-btn:hover{border-color:#0e2140;color:#0e2140}
+.lang-btn.on{background:#3dc9a6;border-color:#3dc9a6;color:#0e2140}
+
+/* WHY SECTION */
+
+  /* CHART */
+  .chart-wrap{margin-bottom:24px;border:1px solid #dde5da;border-radius:8px;overflow:hidden}
+  .chart-header{background:#2d7a5e;color:#fff;font-size:12px;font-weight:700;padding:9px 16px;letter-spacing:0.3px}
+  .chart-area{padding:16px 16px 10px;background:#fff}
+  
+  .chart-legend-item{display:inline-flex;align-items:center;gap:5px;margin-left:12px;font-size:11px;color:#666}
+  .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .legend-dash{display:inline-block;width:16px;height:0;border-top:2px dashed;flex-shrink:0}
+
+  .chart-footer{display:flex;align-items:baseline;gap:8px;font-size:13px;color:#5a6a58;margin-top:8px;padding-top:8px;border-top:1px solid #eee;flex-wrap:wrap}
+  .chart-footer strong{font-size:16px;color:#1a6b3e;font-weight:700}
+
+  .why{background:#f0f7f5;border-bottom:1px solid #dde5da;padding:24px 36px}
+.section-label{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2d7a5e;margin-bottom:12px}
+.why-body{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:680px){.why-body{grid-template-columns:1fr}}
+.why-col h4{font-size:13px;font-weight:700;color:#0e2140;margin-bottom:8px}
+.why-col p{font-size:13px;color:#4a5550;line-height:1.65;margin-bottom:8px}
+.why-steps{display:flex;flex-direction:column;gap:10px}
+.why-step{display:flex;gap:12px;align-items:flex-start}
+.why-num{width:22px;height:22px;min-width:22px;border-radius:50%;background:#0e2140;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.why-step p{font-size:13px;color:#4a5550;line-height:1.6}
+
+/* BODY */
+.body{padding:30px 36px}
+.clusters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.clu{font-size:12px;font-weight:600;padding:7px 16px;border:1px solid #c8d8c5;border-radius:6px;background:#fff;color:#5a7055;cursor:pointer;transition:all .15s;text-align:center;line-height:1.2}
+.clu small{display:block;font-size:10px;font-weight:400;opacity:0.65;margin-top:2px}
+.clu:hover{border-color:#3d6e35;color:#3d6e35}
+.clu.on{background:#0e2140;border-color:#0e2140;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}.header{flex-direction:column;align-items:flex-start}.header-right{align-items:flex-start}.body,
+  /* CHART */
+  .chart-wrap{margin-bottom:24px;border:1px solid #dde5da;border-radius:8px;overflow:hidden}
+  .chart-header{background:#2d7a5e;color:#fff;font-size:12px;font-weight:700;padding:9px 16px;letter-spacing:0.3px}
+  .chart-area{padding:16px 16px 10px;background:#fff}
+  
+  .chart-legend-item{display:inline-flex;align-items:center;gap:5px;margin-left:12px;font-size:11px;color:#666}
+  .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .legend-dash{display:inline-block;width:16px;height:0;border-top:2px dashed;flex-shrink:0}
+
+  .chart-footer{display:flex;align-items:baseline;gap:8px;font-size:13px;color:#5a6a58;margin-top:8px;padding-top:8px;border-top:1px solid #eee;flex-wrap:wrap}
+  .chart-footer strong{font-size:16px;color:#1a6b3e;font-weight:700}
+
+  .why{padding:22px 20px}}
+.sl{margin-bottom:18px}
+.sl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.sl-label{font-size:13px;color:#5a6a58}
+.sl-val{font-size:15px;font-weight:700;color:#0e2140}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:#c8d8c5;border-radius:99px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#0e2140;border:2px solid #fff;box-shadow:0 0 0 1.5px #0e2140;cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#0e2140;border:2px solid #fff;cursor:pointer}
+hr{border:none;border-top:1px solid #dde5da;margin:22px 0}
+.results{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:560px){.results{grid-template-columns:1fr 1fr}}
+.rc{background:#f5f8f4;border-radius:8px;padding:14px 16px;border:1px solid #dde5da}
+.rc-label{font-size:10px;color:#8a9e87;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600}
+.rc-val{font-size:21px;font-weight:700;color:#101a12;line-height:1.1}
+.rc-val.good{color:#1a6b3e}
+.rc-val.warn{color:#8a6200}
+.rc-val.bad{color:#8b2424}
+.rc-sub{font-size:11px;color:#8a9e87;margin-top:3px}
+.verdict{padding:13px 16px;font-size:13px;line-height:1.65;margin-bottom:22px;border-left:3px solid;border-radius:0}
+.verdict.good{background:#edf7f2;color:#1a6b3e;border-color:#2d7a5e}
+.verdict.warn{background:#fdf8ec;color:#6b4c00;border-color:#c9a44a}
+.verdict.bad{background:#fdf0f0;color:#7a2020;border-color:#b84040}
+.bars{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 80px;align-items:center;gap:10px}
+@media(max-width:500px){.bar-row{grid-template-columns:100px 1fr 64px}}
+.bar-label{font-size:12px;color:#5a6a58;text-align:right}
+.bar-track{height:6px;background:#e4ece2;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width .35s cubic-bezier(.4,0,.2,1)}
+.bar-amount{font-size:12px;font-weight:600;color:#101a12}
+.sens-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+@media(max-width:500px){.sens-grid{grid-template-columns:1fr 1fr}}
+.si{border:1px solid #dde5da;border-radius:8px;padding:13px 10px;text-align:center;background:#fff}
+.si.on{border:2px solid #0e2140}
+.si-price{font-size:16px;font-weight:700;color:#101a12;margin-bottom:4px}
+.si-val{font-size:13px;color:#1a6b3e;font-weight:700;margin-bottom:3px}
+.si-pb{font-size:11px;color:#8a9e87}
+.pomace-note{background:#f0f4ff;border:1px solid #c5d2f0;border-left:3px solid #3a5fbf;border-radius:0 6px 6px 0;padding:14px 18px;margin-bottom:22px;font-size:13px;color:#2a3d7a;line-height:1.7}
+.pomace-note strong{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#1e2e60;margin-bottom:7px}
+.footnote{font-size:11px;color:#8a9e87;line-height:1.7;padding-top:16px;border-top:1px solid #dde5da}
+
+  /* NIR OUTPUT BOX — v9 */
+  .nir-output-box{background:#fff;border:1px solid #b8dece;border-left:4px solid #0e2140;border-radius:0 8px 8px 0;padding:16px 20px;margin-top:16px}
+  .nir-output-header{display:flex;align-items:center;gap:9px;margin-bottom:14px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#0e2140}
+  .nir-output-items{display:flex;flex-direction:column;gap:9px}
+  .nir-item{display:flex;align-items:center;gap:12px;padding:8px 10px;background:#f5f9f7;border-radius:5px}
+  .nir-num{width:22px;height:22px;min-width:22px;border-radius:50%;background:#0e2140;color:#3dc9a6;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .nir-item-text{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .nir-item-name{font-size:13px;font-weight:600;color:#1a3a2a}
+  .nir-item-unit{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2d7a5e;background:#d8f0e8;padding:2px 7px;border-radius:3px}
+  .moist-activate-hint{display:flex;align-items:flex-start;gap:7px;margin-top:8px;font-size:12px;color:#3a6a50;line-height:1.55;background:#edf7f2;border-radius:5px;padding:9px 12px;border:1px solid #b8dece}
+  /* COMPANY FOOTER — v9 */
+  .company-footer{background:#0e2140;border-radius:10px;padding:32px 36px;margin-top:20px;display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:start}
+  @media(max-width:680px){.company-footer{grid-template-columns:1fr;gap:28px}}
+  .cf-brand-col{display:flex;flex-direction:column;gap:20px;padding-right:32px}
+  .cf-brand-lockup{border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:18px}
+  .cf-wordmark{font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;line-height:1.1;margin-bottom:5px}
+  .cf-wordmark em{color:#3dc9a6;font-style:normal}
+  .cf-tagline{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-top:4px}
+  .cf-contacts{display:flex;flex-direction:column;gap:10px}
+  .cf-link{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:500;color:rgba(255,255,255,0.65);text-decoration:none;transition:color .15s}
+  .cf-link:hover{color:#3dc9a6}
+  .cf-link svg{opacity:0.45;flex-shrink:0;transition:opacity .15s}
+  .cf-link:hover svg{opacity:1}
+  .cf-col-divider{width:1px;background:rgba(255,255,255,0.1);margin:0 8px;align-self:stretch}
+  @media(max-width:680px){.cf-col-divider{display:none}}
+  .cf-offices-col{display:flex;flex-direction:column;gap:0;padding-left:32px}
+  @media(max-width:680px){.cf-offices-col{padding-left:0}}
+  .cf-office{display:flex;gap:14px;align-items:flex-start;padding:18px 0}
+  .cf-office:first-child{padding-top:0}
+  .cf-office-sep{height:1px;background:rgba(255,255,255,0.08)}
+  .cf-office-flag{font-size:22px;line-height:1;flex-shrink:0;margin-top:3px}
+  .cf-office-company{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+  .cf-office-region{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#3dc9a6;margin-bottom:8px}
+  .cf-office-address{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8}
+  .cf-legal-strip{border-top:1px solid rgba(255,255,255,0.08);margin-top:20px;padding-top:16px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.7;text-align:center}
+
+
+  .lang-bar{display:flex;justify-content:flex-end;align-items:center;gap:6px;padding:10px 0 8px;max-width:900px;margin:0 auto;width:100%}
+  .lang-btn{font-size:13px;font-weight:700;padding:9px 16px;border:1.5px solid #c5d0db;border-radius:5px;background:#fff;color:#6b7a8a;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;min-width:44px;min-height:44px;-webkit-appearance:none;user-select:none}
+  .lang-btn.on{background:#0e2140;border-color:#0e2140;color:#fff}
+  .results-context{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+  @media(max-width:560px){.results-context{grid-template-columns:1fr}}
+  .rc-loss{background:#fff3f0;border:1px solid #e8c0b8}
+  .rc-floor{background:#f8f8f8;border:1px solid #ddd}
+  .rc-val-loss{color:#c0392b}
+  .rc-val-gray{color:#aaa}
+  .results-sep{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#2d7a5e;margin-bottom:10px;padding-left:2px}
+  .calc-detail{border:1px solid #dde5da;border-radius:8px;margin-bottom:20px;overflow:hidden}
+  .calc-detail-summary{display:flex;align-items:center;gap:8px;padding:13px 16px;cursor:pointer;font-size:13px;font-weight:600;color:#2d7a5e;background:#f5f9f6;list-style:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .calc-detail-summary::-webkit-details-marker{display:none}
+  .calc-detail[open] .calc-detail-arrow{transform:rotate(180deg)}
+  .calc-detail-body{padding:20px;border-top:1px solid #dde5da;background:#fff}
+  .cd-step{display:flex;gap:14px;margin-bottom:16px}
+  .cd-step:last-child{margin-bottom:0}
+  .cd-num{width:24px;height:24px;min-width:24px;border-radius:50%;background:#0e2140;color:#3dc9a6;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .cd-text{font-size:13px;color:#374151;line-height:1.65;width:100%}
+  .cd-text strong{color:#0e2140;font-weight:700}
+  .cd-formula{display:block;font-family:monospace;background:#f5f8f4;border:1px solid #dde5da;border-radius:4px;padding:6px 10px;margin:6px 0;font-size:12px;color:#1a4a30}
+  .cd-result{background:#edf7f2;border:1px solid #b8dece;border-radius:4px;padding:2px 8px;font-weight:700;color:#1a6b3e}
+  .cd-note{font-size:11px;color:#888;font-style:italic;line-height:1.6;margin-top:4px;display:block}
+  .cd-divider{border:none;border-top:1px dashed #dde5da;margin:14px 0}
+  .cb-branch{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3dc9a6;margin-bottom:3px}
+
+
+  /* ── CONTACT BAND ────────────────────────────────────────── */
+  .contact-band{background:#0e2140;margin-top:40px;padding:72px 40px}
+  .contact-band-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+  @media(max-width:760px){.contact-band-inner{grid-template-columns:1fr;gap:40px}.contact-band{padding:48px 24px}}
+  .cb-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#3dc9a6;margin-bottom:14px}
+  .cb-title{font-size:28px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:10px;letter-spacing:-0.3px}
+  .cb-sub{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:32px}
+  .cb-offices{display:flex;flex-direction:column;gap:20px}
+  .cb-office{display:flex;gap:14px;align-items:flex-start}
+  .cb-flag{font-size:20px;line-height:1;flex-shrink:0;margin-top:2px}
+  .cb-branch{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3dc9a6;margin-bottom:3px}
+  .cb-co{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+  .cb-addr{font-size:12px;color:rgba(255,255,255,0.38);line-height:1.6}
+  .cb-tel{display:block;font-size:12px;font-weight:600;color:#3dc9a6;text-decoration:none;margin-top:4px}
+  .cb-form{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:28px}
+  .cb-form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:480px){.cb-form-row{grid-template-columns:1fr}}
+  .cb-field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+  .cb-field label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+  .cb-field input,.cb-field select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:11px 14px;font-size:13px;color:#fff;outline:none;transition:all .15s;width:100%;font-family:inherit;-webkit-appearance:none}
+  .cb-field input:focus,.cb-field select:focus{border-color:rgba(61,201,166,0.45);background:rgba(61,201,166,0.04)}
+  .cb-field input::placeholder{color:rgba(255,255,255,0.2)}
+  .cb-field select option{background:#1a3560;color:#fff}
+  .cb-hint{font-size:11px;color:rgba(255,255,255,0.28);font-style:italic}
+  .phone-row{display:flex;gap:8px}
+  .prefix-select{width:115px!important;flex-shrink:0}
+  .cb-send{width:100%;padding:14px;background:#3dc9a6;border:none;border-radius:6px;font-size:13px;font-weight:700;color:#0e2140;cursor:pointer;letter-spacing:0.3px;transition:background .15s;margin-top:4px;margin-bottom:12px;font-family:inherit;-webkit-appearance:none;touch-action:manipulation}
+  .cb-send:hover{background:#34b596}
+  .cb-legal{font-size:11px;color:rgba(255,255,255,0.22);line-height:1.6;text-align:center}
+  .form-msg{padding:12px 16px;border-radius:6px;font-size:13px;font-weight:600;text-align:center;margin-bottom:14px}
+  .form-msg.ok{background:rgba(61,201,166,0.12);color:#3dc9a6;border:1px solid rgba(61,201,166,0.25)}
+  .form-msg.err{background:rgba(220,60,60,0.1);color:#f08080;border:1px solid rgba(220,60,60,0.25)}
+  /* ── PAGE FOOTER ─────────────────────────────────────────── */
+  .page-footer{background:#07111f;padding:32px 40px}
+  .pf-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .pf-brand{display:flex;flex-direction:column;gap:5px}
+  .pf-wordmark{font-size:17px;font-weight:800;color:#fff;letter-spacing:-0.3px}
+  .pf-tag{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:6px}
+  .pf-links{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pf-links a{font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none;transition:color .15s}
+  .pf-links a:hover{color:#3dc9a6}
+  .pf-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0}
+  .pf-legal{font-size:11px;color:rgba(255,255,255,0.2);line-height:1.65;max-width:420px;text-align:right}
+  @media(max-width:640px){.pf-inner{flex-direction:column;align-items:flex-start}.pf-legal{text-align:left;max-width:100%}}
+
+</style>
+</head>
+<body>
+<div class="lang-bar" id="langBar">
+  <button class="lang-btn on" data-lang="en">EN</button>
+  <button class="lang-btn" data-lang="it">IT</button>
+  <button class="lang-btn" data-lang="es">ES</button>
+  <button class="lang-btn" data-lang="el">ΕΛ</button>
+  <button class="lang-btn" data-lang="fr">FR</button>
+</div>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">
+      <img src="data:image/png;base64,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" alt="IAS Analysis">
+    </div>
+    <div class="header-right">
+      <div>
+        <div class="header-product">IAS <em>OLIV-IN POMACE</em></div>
+        <div class="header-sub" data-t="subtitle">ROI Calculator · 2-phase systems · offline tool v1.1</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WHY SECTION -->
+  <div class="why">
+    <div class="section-label" data-t="why_label">Perché si perde olio nella sansa — e perché gli operatori non se ne accorgono o sottostimano l'impatto</div>
+
+    <!-- CHART -->
+    <div class="chart-wrap">
+      <div class="chart-header" data-t="chart_title">Olio residuo in sansa senza monitoraggio NIR — fluttuazione reale nel corso di un turno</div>
+      <div class="chart-area">
+        <svg viewBox="0 0 660 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+          <defs>
+            <marker id="arrowX" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+              <polygon points="0 0,7 3.5,0 7" fill="#666"/>
+            </marker>
+            <marker id="arrowY" markerWidth="7" markerHeight="7" refX="3.5" refY="0" orient="auto">
+              <polygon points="0 7,3.5 0,7 7" fill="#666"/>
+            </marker>
+            <marker id="arrowMed" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0,8 4,0 8" fill="#2d7a5e"/>
+            </marker>
+            <marker id="arrowPhys" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0,8 4,0 8" fill="#c0392b"/>
+            </marker>
+          </defs>
+
+          <!-- y-axis -->
+          <line x1="56" y1="190" x2="56" y2="14" stroke="#666" stroke-width="1.2" marker-end="url(#arrowY)"/>
+          <!-- x-axis -->
+          <line x1="56" y1="190" x2="572" y2="190" stroke="#666" stroke-width="1.2" marker-end="url(#arrowX)"/>
+          <!-- y label -->
+          <text x="14" y="108" text-anchor="middle" font-size="11" fill="#777" font-family="sans-serif" transform="rotate(-90,14,108)">% WM</text>
+          <!-- x label -->
+          <text x="310" y="208" text-anchor="middle" font-size="11" fill="#777" font-family="sans-serif" data-t="chart_x">tempo (turno)</text>
+
+          <!-- y-axis tick labels -->
+          <text x="50" y="185" text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">0</text>
+          <text x="50" y="155" text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">1</text>
+          <text x="50" y="125" text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">2</text>
+          <text x="50" y="95"  text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">3</text>
+          <text x="50" y="65"  text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">4</text>
+          <text x="50" y="35"  text-anchor="end" font-size="10" fill="#888" font-family="sans-serif">5</text>
+
+          <!-- horizontal grid lines -->
+          <line x1="56" y1="155" x2="567" y2="155" stroke="#e8eee8" stroke-width="0.8"/>
+          <line x1="56" y1="125" x2="567" y2="125" stroke="#e8eee8" stroke-width="0.8"/>
+          <line x1="56" y1="95"  x2="567" y2="95"  stroke="#e8eee8" stroke-width="0.8"/>
+          <line x1="56" y1="65"  x2="567" y2="65"  stroke="#e8eee8" stroke-width="0.8"/>
+          <line x1="56" y1="35"  x2="567" y2="35"  stroke="#e8eee8" stroke-width="0.8"/>
+
+          <!-- PHYSICS LIMIT band: 1.5–2% (y=170 to y=125, each % = 30px, origin at y=185) -->
+          <!-- y = 185 - (val * 30) -->
+          <!-- 1.5% → y=140, 2% → y=125 -->
+          <rect x="56" y="125" width="511" height="15" fill="rgba(192,57,43,0.08)"/>
+          <!-- physics limit line at 2% -->
+          <line x1="56" y1="125" x2="548" y2="125" stroke="#c0392b" stroke-width="1.3" stroke-dasharray="5,3" marker-end="url(#arrowPhys)"/>
+
+          <!-- average dashed line at 3.5% → y = 185-(3.5*30) = 185-105 = 80 -->
+          <line x1="56" y1="80" x2="548" y2="80" stroke="#2d7a5e" stroke-width="1.5" stroke-dasharray="7,4" marker-end="url(#arrowMed)"/>
+
+          <!-- sine wave: oscillates between 2% (y=125) and 5% (y=35), center at 3.5% (y=80) -->
+          <!-- amplitude = 45px, period ≈ 170px -->
+          <path d="M56,80 C80,80 98,35 130,35 C162,35 175,125 210,125 C245,125 258,35 290,35 C322,35 338,125 370,125 C402,125 418,35 450,35 C482,35 495,80 530,80" fill="none" stroke="#1a6b3e" stroke-width="2.3" stroke-linejoin="round"/>
+
+          <!-- recoverable zone shading (above 3.5% → y<80) -->
+          <path d="M56,80 C80,80 98,35 130,35 C162,35 175,80 196,80 L56,80 Z" fill="rgba(26,107,62,0.07)"/>
+          <path d="M196,80 C222,80 258,35 290,35 C322,35 338,80 358,80 L196,80 Z" fill="rgba(26,107,62,0.07)"/>
+          <path d="M358,80 C382,80 418,35 450,35 C482,35 495,80 530,80 L358,80 Z" fill="rgba(26,107,62,0.07)"/>
+
+          <!-- LABELS RIGHT SIDE -->
+          <!-- MAX 5% at y=35 -->
+          <text x="537" y="39" font-size="11" font-weight="700" fill="#333" font-family="sans-serif">MAX 5,0%</text>
+          <!-- MED 3.5% at y=80 -->
+          <text x="537" y="84" font-size="11" font-weight="700" fill="#2d7a5e" font-family="sans-serif">MED 3,5%</text>
+          <!-- Physics limit at y=125 -->
+          <text x="537" y="122" font-size="10" font-weight="700" fill="#c0392b" font-family="sans-serif" data-t="chart_phys_label">limite fisico ~2%</text>
+          <!-- MIN 2% at y=125 -->
+          <text x="537" y="135" font-size="10" fill="#666" font-family="sans-serif">MIN 2,0%</text>
+
+          <!-- recoverable zone label -->
+          <text x="170" y="58" text-anchor="middle" font-size="10" fill="#1a6b3e" font-family="sans-serif" font-style="italic" data-t="chart_recover_label">zona recuperabile</text>
+        </svg>
+        <div class="chart-footer">
+          <span data-t="chart_avg_label">media olio perso:</span>
+          <strong>3,5%</strong>
+          <span class="chart-legend-item"><span class="legend-dot" style="background:#1a6b3e"></span><span data-t="chart_leg_wave">fluttuazione reale</span></span>
+          <span class="chart-legend-item"><span class="legend-dash" style="border-color:#2d7a5e"></span><span data-t="chart_leg_avg">media di turno</span></span>
+          <span class="chart-legend-item"><span class="legend-dash" style="border-color:#c0392b"></span><span data-t="chart_leg_phys">limite fisico decanter</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="why-body">
+      <div class="why-col">
+        <h4 data-t="why_q_title">La domanda dello scettico</h4>
+        <p data-t="why_q_p1">Un frantoiano può pensare che il suo sistema di estrazione abbia già raggiunto il massimo dell'efficienza. Ma è davvero così?</p>
+        <p data-t="why_q_p2">Il problema non è il decanter. È la <strong>stabilità del processo</strong>. La media rassicura, ma spesso nasconde ciò che conta.</p>
+        <p data-t="why_q_p3">Se durante un turno l'olio residuo nella sansa oscilla tra il 2% e il 5% tal quale — ed è del tutto normale — la media si ferma a 3,5%. Ma per ore stai lavorando a 4,5–5,0%. Ed è lì che perdi molto olio. Ed è lì che puoi recuperarlo.</p>
+        <p data-t="why_q_p4">Quei picchi non sono inevitabili: sono <strong>invisibili</strong>. Finché non li misuri, non li controlli. Il NIR li rende visibili in tempo reale, mentre accadono. E ciò che diventa visibile, diventa migliorabile.</p>
+      </div>
+      <div class="why-col">
+        <h4 data-t="why_steps_title">La catena logica — passo dopo passo</h4>
+        <div class="why-steps">
+          <div class="why-step"><div class="why-num">1</div><p data-t="why_s1">La fisica del decanter impone un limite strutturale: circa 1,5–2,0% WM. Al di sotto non si può andare senza compromettere la qualità. Tutto ciò che sta sopra — tipicamente 0,5–1,5 pp in più — dipende dall'instabilità operativa: variazioni di portata, materia prima, bilanciamento idrico, stop and go.</p></div>
+          <div class="why-step"><div class="why-num">2</div><p data-t="why_s2">Senza monitoraggio continuo, l'operatore non riceve alcun segnale. Il processo può restare in condizioni sub-ottimali per ore, senza che nessuno se ne accorga. La media nasconde i picchi.</p></div>
+          <div class="why-step"><div class="why-num">3</div><p data-t="why_s3">IAS OLIV-IN, il sistema NIR montato direttamente sulla linea di lavoro, misura l'olio residuo in continuo sulla linea di scarico del decanter. Il dato è visibile su PLC o schermo. Quando la lettura supera la soglia definita, l'operatore riceve un allarme e può intervenire sulle leve disponibili: acqua di processo, temperatura, portata, giri — a seconda della configurazione.</p></div>
+          <div class="why-step"><div class="why-num">4</div><p data-t="why_s4">Il risultato non è un decanter più performante, ma meno tempo operato lontano dal punto ottimale. La quota recuperabile — 0,5–1,0 pp — corrisponde esattamente alla componente variabile e controllabile delle perdite. Tanto più si stabilizza il processo, tanto più ci si avvicina al limite fisico del sistema.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR -->
+  <div class="body">
+
+    <!-- INTRO BANNER -->
+    <div class="calc-intro">
+      <div class="calc-intro-title" data-t="calc_intro_title">Calcola rapidamente il ROI</div>
+      <div class="calc-intro-sub" data-t="calc_intro_sub">Ritorno sull'investimento per l'acquisto di una soluzione NIR IAS Analysis — inserisci i parametri del tuo impianto per ottenere una stima immediata.</div>
+    </div>
+
+    <!-- MILL SIZE -->
+    <div class="section-label" data-t="mill_size_label">Dimensione impianto — selezione rapida</div>
+    <div class="clusters" id="clusterBtns">
+      <button class="clu" data-vol="50000" data-yld="16" data-base="3.5">Micro<small>50 t</small></button>
+      <button class="clu" data-vol="300000" data-yld="16" data-base="3.5">Small<small>300 t</small></button>
+      <button class="clu on" data-vol="500000" data-yld="16" data-base="3.5">Medium<small>500 t</small></button>
+      <button class="clu" data-vol="1000000" data-yld="16" data-base="3.5">Large<small>1,000 t</small></button>
+      <button class="clu" data-vol="2500000" data-yld="16" data-base="3.5">Industrial<small>2,500 t</small></button>
+    </div>
+
+    <div class="grid2">
+      <div>
+        <div class="section-label" data-t="prod_label">Parametri di produzione</div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="vol_label">Olive lavorate in una stagione (kg)</span><span class="sl-val" id="vO">500.000 kg</span></div>
+          <input type="range" id="vol" min="50000" max="3000000" step="50000" value="500000">
+        </div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="yld_label">Resa in olio media (%)</span><span class="sl-val" id="yO">16,0%</span></div>
+          <input type="range" id="yld" min="10" max="25" step="0.5" value="16">
+        </div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="base_label">Olio residuo nella sansa tal quale (% WM)</span><span class="sl-val" id="bO">3,5% WM</span></div>
+          <input type="range" id="base" min="1.5" max="7" step="0.1" value="3.5">
+        </div>
+
+        <!-- MOISTURE OPTIONAL -->
+        <div class="sl moisture-row">
+          <div class="sl-head">
+            <span class="sl-label" data-t="moist_label">Umidità sansa <span class="optional-tag" data-t="optional_tag">opzionale</span></span>
+            <span class="sl-val" id="moistO">—</span>
+          </div>
+          <div class="moisture-toggle-row">
+            <label class="toggle-switch">
+              <input type="checkbox" id="moistToggle">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="moist-hint" data-t="moist_hint">Range tipico 2 fasi: 55–70% · media ~62%</span>
+          </div>
+          <div class="moist-activate-hint" data-t="moist_activate_hint">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="6.5" cy="6.5" r="6" stroke="#2d7a5e" stroke-width="1"/><path d="M6.5 3.5v3.5l2 1.2" stroke="#2d7a5e" stroke-width="1.2" stroke-linecap="round"/></svg>
+            Attiva il selettore per impostare l'umidità reale e ottenere un calcolo più preciso.
+          </div>
+          <div id="moistSliderWrap" style="display:none;margin-top:10px">
+            <input type="range" id="moist" min="45" max="80" step="1" value="62">
+          </div>
+        </div>
+
+        <!-- NIR OLIV-IN OUTPUT BOX -->
+        <div class="nir-output-box">
+          <div class="nir-output-header">
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0"><circle cx="7.5" cy="7.5" r="7" fill="#0e2140"/><path d="M4.5 7.5l2.5 2.5 4-4.5" stroke="#3dc9a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-t="nir_box_title">IAS OLIV-IN misura in continuo sulla linea</span>
+          </div>
+          <div class="nir-output-items">
+            <div class="nir-item">
+              <div class="nir-num">1</div>
+              <div class="nir-item-text">
+                <span class="nir-item-name" data-t="nir_m1">Residuo grassi tal quale</span>
+                <span class="nir-item-unit">% WM</span>
+              </div>
+            </div>
+            <div class="nir-item">
+              <div class="nir-num">2</div>
+              <div class="nir-item-text">
+                <span class="nir-item-name" data-t="nir_m2">Residuo grassi su sostanza secca</span>
+                <span class="nir-item-unit">% DM</span>
+              </div>
+            </div>
+            <div class="nir-item">
+              <div class="nir-num">3</div>
+              <div class="nir-item-text">
+                <span class="nir-item-name" data-t="nir_m3">Umidità</span>
+                <span class="nir-item-unit">%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label" data-t="econ_label">Parametri economici e NIR</div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="price_label">Prezzo di vendita olio (€/kg)</span><span class="sl-val" id="pO">€6,0/kg</span></div>
+          <input type="range" id="price" min="3" max="14" step="0.5" value="6">
+        </div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="capex_label">CAPEX sistema NIR IAS Analysis (€)</span><span class="sl-val" id="cO">€30.000</span></div>
+          <input type="range" id="capex" min="10000" max="80000" step="1000" value="30000">
+        </div>
+
+        <div class="sl">
+          <div class="sl-head"><span class="sl-label" data-t="delta_label">Riduzione perdita recuperabile (pp tal quale)</span><span class="sl-val" id="dO">0,5 pp</span></div>
+          <input type="range" id="delta" min="0.2" max="3.0" step="0.1" value="0.5">
+        </div>
+      </div>
+    </div>
+
+    <!-- POMACE NOTE EXPANDED -->
+    <div class="pomace-note">
+      <strong data-t="pomace_title">La sansa nei sistemi a 2 fasi</strong>
+      <span data-t="pomace_body">In un decanter a 2 fasi, le acque di vegetazione <strong>non vengono separate</strong> — rimangono nella sansa. La sansa umida rappresenta tipicamente il <strong>65–80% del peso delle olive in ingresso</strong> (vs. 25–35% nei sistemi a 3 fasi), con umidità del 55–70%. Il calcolatore usa la formula: <em>sansa umida ≈ olive − olio estratto</em> — una stima conservativa che sottovaluta leggermente la massa reale: il vero rapporto sansa/olive in un sistema a 2 fasi è sempre più alto di quanto questa formula suggerisca, il che significa che i risultati del calcolatore sono prudenti per difetto.</span>
+    </div>
+
+    <hr>
+    <div class="section-label" data-t="results_label">Risultati</div>
+    <!-- LOSS CONTEXT -->
+    <div class="results results-context">
+      <div class="rc rc-loss">
+        <div class="rc-label" data-t="r_total_loss">Olio perso in sansa (attuale)</div>
+        <div class="rc-val rc-val-loss" id="rTotalLossKg">—</div>
+        <div class="rc-sub" id="rTotalLossEur">—</div>
+      </div>
+      <div class="rc rc-floor">
+        <div class="rc-label" data-t="r_floor">Limite fisico decanter (~1,5% WM)</div>
+        <div class="rc-val rc-val-gray" id="rFloorKg">—</div>
+        <div class="rc-sub" data-t="r_floor_sub">non recuperabile</div>
+      </div>
+    </div>
+    <div class="results-sep" data-t="r_recovery_label">↳ recuperabile con IAS OLIV-IN</div>
+    <!-- RECOVERY RESULTS -->
+    <div class="results">
+      <div class="rc"><div class="rc-label" data-t="r_oil">Olio recuperato</div><div class="rc-val" id="rOil">—</div><div class="rc-sub" data-t="r_oil_sub">kg / stagione</div></div>
+      <div class="rc"><div class="rc-label" data-t="r_val">Valore recuperato</div><div class="rc-val" id="rVal">—</div><div class="rc-sub" data-t="r_val_sub">€ / stagione</div></div>
+      <div class="rc"><div class="rc-label" data-t="r_roi">ROI vs CAPEX</div><div class="rc-val" id="rROI">—</div><div class="rc-sub" data-t="r_roi_sub">% per stagione</div></div>
+      <div class="rc"><div class="rc-label" data-t="r_pb">Payback</div><div class="rc-val" id="rPB">—</div><div class="rc-sub" data-t="r_pb_sub">stagioni</div></div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+    <details class="calc-detail" id="calcDetail">
+      <summary class="calc-detail-summary">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="calc-detail-arrow" style="flex-shrink:0;transition:transform .25s"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-t="detail_label">Mostra dettaglio del calcolo</span>
+      </summary>
+      <div class="calc-detail-body" id="calcDetailBody"></div>
+    </details>
+    <div class="section-label" data-t="bars_label">Valore per prezzo olio — impianto attuale e Δ selezionato</div>
+    <div class="bars" id="bars"></div>
+
+    <div class="section-label" data-t="sens_label">Sensitività al prezzo olio — impianto e Δ selezionati</div>
+    <div class="sens-grid" id="sens"></div>
+
+    <div class="footnote" data-t="footnote">ROI calcolato sul solo CAPEX. La sansa umida è stimata come olive lavorate meno olio estratto (stima conservativa: il reale è 65–80% dell'input olive nei sistemi a 2 fasi). Il recupero olio deriva esclusivamente dalla riduzione delle perdite da instabilità di processo. Dati a scopo informativo; i risultati dipendono dalle condizioni specifiche dell'impianto e non costituiscono garanzia.</div>
+
+    <!-- CONTACT BAND -->
+<div class="contact-band">
+  <div class="contact-band-inner">
+    <div class="cb-left">
+      <div class="cb-eyebrow" data-t="cb_eyebrow">IAS OLIV-IN POMACE</div>
+      <h2 class="cb-title" data-t="form_title">Vuoi ricevere informazioni?</h2>
+      <p class="cb-sub" data-t="form_sub">Lascia i tuoi dati — ti ricontatteremo entro 24 ore.</p>
+      <div class="cb-offices">
+        <div class="cb-office">
+          <span class="cb-flag">🇸🇬</span>
+          <div>
+            <div class="cb-branch" data-t="branch_sg">Filiale di Singapore</div>
+            <div class="cb-co">IAS Global Pte. Ltd.</div>
+            <div class="cb-addr">160 Robinson Road, #14-04, Singapore 068914</div>
+            <a href="tel:+6591995851" class="cb-tel">+65 9199 5851</a>
+          </div>
+        </div>
+        <div class="cb-office">
+          <span class="cb-flag">🇭🇺</span>
+          <div>
+            <div class="cb-branch" data-t="branch_hu">Filiale in Ungheria</div>
+            <div class="cb-co">IAT Hungary Technology Co. Kft.</div>
+            <div class="cb-addr">Izabella Utca 68/B A. Lház., Fsz. 5, 1064 Budapest</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cb-right">
+      <div class="cb-form">
+        <div class="cb-form-row">
+          <div class="cb-field">
+            <label data-t="form_name">Nome *</label>
+            <input type="text" id="cf_name" autocomplete="given-name" placeholder="Mario">
+          </div>
+          <div class="cb-field">
+            <label data-t="form_surname">Cognome *</label>
+            <input type="text" id="cf_surname" autocomplete="family-name" placeholder="Rossi">
+          </div>
+        </div>
+        <div class="cb-field">
+          <label data-t="form_email">Email *</label>
+          <input type="email" id="cf_email" autocomplete="email" placeholder="mario@frantoio.it">
+        </div>
+        <div class="cb-field">
+          <label data-t="form_phone">Cellulare *</label>
+          <div class="phone-row">
+            <select id="cf_prefix" class="prefix-select">
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+30">🇬🇷 +30</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+36">🇭🇺 +36</option>
+              <option value="+212">🇲🇦 +212</option>
+              <option value="+216">🇹🇳 +216</option>
+              <option value="+213">🇩🇿 +213</option>
+              <option value="+90">🇹🇷 +90</option>
+              <option value="+972">🇮🇱 +972</option>
+              <option value="+other">🌍 altro</option>
+            </select>
+            <input type="tel" id="cf_phone" placeholder="333 456 7890" style="flex:1">
+          </div>
+          <span class="cb-hint" data-t="form_phone_hint">Includi il prefisso internazionale</span>
+        </div>
+        <div id="formMsg" class="form-msg" style="display:none"></div>
+        <button class="cb-send" id="sendBtn" data-t="form_btn">Invia richiesta</button>
+        <p class="cb-legal" data-t="form_legal">Dati trattati ai sensi del Reg. UE 2016/679 — GDPR.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE FOOTER -->
+<div class="page-footer">
+  <div class="pf-inner">
+    <div class="pf-brand">
+      <div class="pf-wordmark">IAS ANALYSIS</div>
+      <div class="pf-tag" data-t="pf_branches">Filiale di Singapore · Filiale in Ungheria</div>
+      <div class="pf-links">
+        <a href="https://www.ias-glb.com" target="_blank">www.ias-glb.com</a>
+        <span class="pf-dot"></span>
+        <a href="mailto:service@ias-glb.com">service@ias-glb.com</a>
+        <span class="pf-dot"></span>
+        <a href="tel:+6591995851">+65 9199 5851</a>
+      </div>
+    </div>
+    <div class="pf-legal" data-t="footnote">ROI calcolato sul solo CAPEX. Dati a scopo informativo; i risultati dipendono dalle condizioni specifiche dell'impianto.</div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const T = {
+  en:{
+    delta_max_label:'Δ max',
+    delta_warn:'Max recoverable Δ at this baseline: {MAX} pp (physical floor ~1.5% WM)',
+    pf_branches:'Singapore branch · Hungary branch',
+    branch_hu:'Hungary branch',
+    branch_sg:'Singapore branch',
+    detail_label:'Show calculation detail',
+    r_recovery_label:'↳ recoverable with IAS OLIV-IN',
+    r_floor_sub:'non-recoverable',
+    r_floor:'Decanter physical limit (~1.5% WM)',
+    r_total_loss:'Total oil in pomace (current)',
+    moist_activate_hint:'Enable the toggle to set the actual pomace moisture of your mill and get a more precise calculation.',
+    nir_m3:'Moisture',
+    nir_m2:'Residual fat — dry matter basis',
+    nir_m1:'Residual fat — as-is basis',
+    nir_box_title:'IAS OLIV-IN continuous inline measurements',
+    form_ok:'Thank you! Your email client will open to send the request.',
+    form_err_phone:'Please enter a valid phone number.',
+    form_err_email:'Please enter a valid email address.',
+    form_err_required:'Please fill in all required fields.',
+    form_legal:'Your data will be used solely to respond to your request, in accordance with GDPR.',
+    form_btn:'Send information request',
+    form_phone_hint:'with country code',
+    form_phone:'Mobile * ',
+    form_email:'Email *',
+    form_surname:'Last name *',
+    form_name:'First name *',
+    form_sub:'Leave your details — we will get back to you within 24 hours.',
+    form_title:'Want to learn more about IAS OLIV-IN POMACE?',
+    office_hu_city:'Budapest (Europe)',
+    office_sg_city:'Singapore (Asia-Pacific)',
+    moist_box_body:'With {FRAC}% pomace moisture, estimated pomace mass = <strong>{POMACE} kg</strong> ({FRAC}% of olive input) vs. {SIMPLE} kg simplified. Oil recovered at Δ = <strong>{OIL_KG} kg</strong>. Baseline {BASE_DM}% DM · Reduction {DELTA_DM} pp DM.',
+    moist_box_title:'Moisture correction active',
+    moist_hint:'Typical 2-phase range: 55–70% · average ~62%',
+    optional_tag:'optional',
+    moist_label:'Pomace moisture',
+    calc_intro_sub:'Return on investment for an IAS Analysis NIR solution — enter your mill parameters for an immediate estimate.',
+    calc_intro_title:'Calculate your NIR ROI instantly',
+    why_q_p4:'Those peaks are not inevitable: they are <strong>invisible</strong>. Until you measure them, you cannot control them. NIR makes them visible in real time, as they happen. What becomes visible becomes improvable.',
+    chart_leg_phys:'decanter physical limit',
+    chart_leg_avg:'shift average',
+    chart_leg_wave:'actual fluctuation',
+    chart_recover_label:'recoverable zone',
+    chart_phys_label:'physical limit ~2%',
+    chart_note:'',
+    chart_avg_label:'average oil lost:',
+    chart_x:'time (shift)',
+    chart_title:'Residual oil in pomace without NIR monitoring — real fluctuation over a shift',
+    subtitle:'ROI Calculator · 2-phase systems · offline tool v1.1',
+    why_label:'Why oil is lost in pomace — and why operators don\'t see it or underestimate the impact',
+    why_q_title:'The sceptic\'s question',
+    why_q_p1:'A miller may believe his extraction system has already reached peak efficiency. But has it really?',
+    why_q_p2:'The problem is not the decanter. It is <strong>process stability</strong>. The average is reassuring — but it often hides what matters most.',
+    why_q_p3:'If residual oil in pomace fluctuates between 2% and 5% WM during a shift — entirely normal — the average settles at 3.5%. But for hours you are running at 4.5–5.0%. That is where you are losing oil. And that is where you can recover it.',
+    why_steps_title:'The logical chain — step by step',
+    why_s1:'Decanter physics sets a structural floor: approximately 1.5–2.0% WM. Going below this would compromise oil quality. Everything above — typically 0.5–1.5 pp more — results from operational instability: feed rate variation, raw material variability, water balance mismatches, stop-and-go operation.',
+    why_s2:'Without continuous monitoring, the operator receives no signal. The process can run at sub-optimal conditions for hours without anyone noticing. The average hides the peaks.',
+    why_s3:'IAS OLIV-IN, the inline NIR system by IAS Analysis, measures residual oil continuously on the decanter discharge line. The reading is displayed on a PLC or screen. When it exceeds the defined threshold, the operator receives an alarm and can act on the available levers: process water, temperature, feed rate, rotation speed — depending on the mill configuration.',
+    why_s4:'The result is not a better-performing decanter, but less time spent operating away from the optimal point. The recoverable share — 0.5–1.0 pp — corresponds exactly to the variable, controllable component of losses. The more stable the process, the closer it gets to the system\'s physical limit.',
+    mill_size_label:'Mill size — quick select',
+    prod_label:'Production parameters',
+    vol_label:'Olives processed per season (kg)',
+    yld_label:'Average oil yield (%)',
+    base_label:'Residual oil in pomace — as-is basis (% WM)',
+    econ_label:'Economic & NIR parameters',
+    price_label:'Oil selling price (€/kg)',
+    capex_label:'NIR IAS Analysis system CAPEX (€)',
+    delta_label:'Recoverable loss reduction (pp as-is basis)',
+    pomace_title:'Pomace in 2-phase systems',
+    pomace_body:'In a 2-phase decanter, vegetation water is <strong>not separated</strong> — it remains in the pomace. Wet pomace typically represents <strong>65–80% of olive input weight</strong> (vs. 25–35% in 3-phase systems), with moisture of 55–70%. The calculator uses: <em>wet pomace ≈ olives − oil extracted</em> — a conservative estimate that slightly understates true pomace mass. In reality the pomace-to-olive ratio in a 2-phase system is always higher than this formula implies, meaning the calculator results are conservatively understated.',
+    results_label:'Results',
+    r_oil:'Oil recovered',r_oil_sub:'kg / season',
+    r_val:'Value recovered',r_val_sub:'€ / season',
+    r_roi:'ROI vs CAPEX',r_roi_sub:'% per season',
+    r_pb:'Payback',r_pb_sub:'seasons',
+    bars_label:'Value by oil price — current mill & selected Δ',
+    sens_label:'Sensitivity to oil price — selected mill & Δ',
+    footnote:'ROI calculated on CAPEX only. Wet pomace estimated as olives processed minus oil extracted (conservative: actual is 65–80% of olive input in 2-phase systems). Oil gain derives exclusively from reducing instability-driven process losses. Data for informational purposes; results depend on specific mill conditions.',
+    v_bad:'Payback exceeds 15 seasons at these parameters. Consider aggregated adoption (cooperative, producer organisation) rather than individual mill investment.',
+    v_great:'Payback under 1 season. The system pays for itself within the first harvest.',
+    v_good:'Strong ROI — payback estimated at %s seasons. A solid investment at the selected oil price and recovery rate.',
+    v_warn:'Moderate ROI — payback of %s seasons. Requires at least one actionable control lever and a defined alarm-response procedure.',
+    pb_seasons:'seasons',
+  },
+  it:{
+    delta_max_label:'Δ max',
+    delta_warn:'Δ massimo con questo baseline: {MAX} pp (limite fisico ~1,5% WM)',
+    pf_branches:'Filiale di Singapore · Filiale in Ungheria',
+    branch_hu:'Filiale in Ungheria',
+    branch_sg:'Filiale di Singapore',
+    detail_label:'Mostra dettaglio del calcolo',
+    r_recovery_label:'↳ recuperabile con IAS OLIV-IN',
+    r_floor_sub:'non recuperabile',
+    r_floor:'Limite fisico decanter (~1,5% WM)',
+    r_total_loss:'Olio perso in sansa (attuale)',
+    moist_activate_hint:'Attiva il selettore per impostare l\'umidità reale del tuo impianto e ottenere un calcolo più preciso.',
+    nir_m3:'Umidità',
+    nir_m2:'Residuo grassi su sostanza secca',
+    nir_m1:'Residuo grassi tal quale',
+    nir_box_title:'IAS OLIV-IN misura in continuo sulla linea',
+    form_ok:'Grazie! Il tuo client email si aprirà per inviare la richiesta.',
+    form_err_phone:'Inserisci un numero di cellulare valido.',
+    form_err_email:'Inserisci un indirizzo email valido.',
+    form_err_required:'Compila tutti i campi obbligatori.',
+    form_legal:'I dati forniti saranno utilizzati esclusivamente per rispondere alla tua richiesta, in conformità con il GDPR.',
+    form_btn:'Invia richiesta di informazioni',
+    form_phone_hint:'con prefisso internazionale',
+    form_phone:'Cellulare * ',
+    form_email:'Email *',
+    form_surname:'Cognome *',
+    form_name:'Nome *',
+    form_sub:'Lascia i tuoi dati — ti ricontatteremo entro 24 ore.',
+    form_title:'Vuoi ricevere informazioni su IAS OLIV-IN POMACE?',
+    office_hu_city:'Budapest (Europa)',
+    office_sg_city:'Singapore (Asia-Pacifico)',
+    moist_box_body:'Con umidità sansa al {FRAC}%, massa sansa stimata = <strong>{POMACE} kg</strong> ({FRAC}% dell\'input olive) vs. {SIMPLE} kg stimati senza umidità. Olio recuperato a Δ = <strong>{OIL_KG} kg</strong>. Baseline {BASE_DM}% su secco · Riduzione {DELTA_DM} pp su secco.',
+    moist_box_title:'Correzione per umidità attiva',
+    moist_hint:'Range tipico 2 fasi: 55–70% · media ~62%',
+    optional_tag:'opzionale',
+    moist_label:'Umidità della sansa',
+    calc_intro_sub:'Ritorno sull\'investimento per l\'acquisto di una soluzione NIR IAS Analysis — inserisci i parametri del tuo impianto per ottenere una stima immediata.',
+    calc_intro_title:'Calcola rapidamente il ROI',
+    why_q_p4:'Quei picchi non sono inevitabili: sono <strong>invisibili</strong>. Finché non li misuri, non li controlli. Il NIR li rende visibili in tempo reale, mentre accadono. E ciò che diventa visibile, diventa migliorabile.',
+    chart_leg_phys:'limite fisico decanter',
+    chart_leg_avg:'media di turno',
+    chart_leg_wave:'fluttuazione reale',
+    chart_recover_label:'zona recuperabile',
+    chart_phys_label:'limite fisico ~2%',
+    chart_note:'',
+    chart_avg_label:'media olio perso:',
+    chart_x:'tempo (turno)',
+    chart_title:'Olio residuo in sansa senza monitoraggio NIR — fluttuazione reale nel corso di un turno',
+    subtitle:'Calcolatore ROI · sistemi a 2 fasi · strumento offline v1.1',
+    why_label:'Perché si perde olio nella sansa — e perché gli operatori non se ne accorgono o sottostimano l\'impatto',
+    why_q_title:'La domanda dello scettico',
+    why_q_p1:'Un frantoiano può pensare che il suo sistema di estrazione abbia già raggiunto il massimo dell\'efficienza. Ma è davvero così?',
+    why_q_p2:'Il problema non è il decanter. È la <strong>stabilità del processo</strong>. La media rassicura, ma spesso nasconde ciò che conta.',
+    why_q_p3:'Se durante un turno l\'olio residuo nella sansa oscilla tra il 2% e il 5% tal quale — ed è del tutto normale — la media si ferma a 3,5%. Ma per ore stai lavorando a 4,5–5,0%. Ed è lì che perdi molto olio. Ed è lì che puoi recuperarlo.',
+    why_steps_title:'La catena logica — passo dopo passo',
+    why_s1:'La fisica del decanter impone un limite strutturale: circa 1,5–2,0% WM. Al di sotto non si può andare senza compromettere la qualità. Tutto ciò che sta sopra — tipicamente 0,5–1,5 pp in più — dipende dall\'instabilità operativa: variazioni di portata, materia prima, bilanciamento idrico, stop and go.',
+    why_s2:'Senza monitoraggio continuo, l\'operatore non riceve alcun segnale. Il processo può restare in condizioni sub-ottimali per ore, senza che nessuno se ne accorga. La media nasconde i picchi.',
+    why_s3:'IAS OLIV-IN, il sistema NIR montato direttamente sulla linea di lavoro, misura l\'olio residuo in continuo sulla linea di scarico del decanter. Il dato è visibile su PLC o schermo. Quando la lettura supera la soglia definita, l\'operatore riceve un allarme e può intervenire sulle leve disponibili: acqua di processo, temperatura, portata, giri — a seconda della configurazione.',
+    why_s4:'Il risultato non è un decanter più performante, ma meno tempo operato lontano dal punto ottimale. La quota recuperabile — 0,5–1,0 pp — corrisponde esattamente alla componente variabile e controllabile delle perdite. Tanto più si stabilizza il processo, tanto più ci si avvicina al limite fisico del sistema.',
+    mill_size_label:'Dimensione impianto — selezione rapida',
+    prod_label:'Parametri di produzione',
+    vol_label:'Olive lavorate in una stagione (kg)',
+    yld_label:'Resa in olio media (%)',
+    base_label:'Olio residuo nella sansa tal quale (% WM)',
+    econ_label:'Parametri economici e NIR',
+    price_label:'Prezzo di vendita olio (€/kg)',
+    capex_label:'CAPEX sistema NIR IAS Analysis (€)',
+    delta_label:'Riduzione perdita recuperabile (pp tal quale)',
+    pomace_title:'La sansa nei sistemi a 2 fasi',
+    pomace_body:'In un decanter a 2 fasi, le acque di vegetazione <strong>non vengono separate</strong> — rimangono nella sansa. La sansa umida rappresenta tipicamente il <strong>65–80% del peso delle olive in ingresso</strong> (vs. 25–35% nei sistemi a 3 fasi), con umidità del 55–70%. Il calcolatore usa: <em>sansa umida ≈ olive − olio estratto</em> — una stima conservativa che sottovaluta leggermente la massa reale. Il rapporto sansa/olive in un sistema a 2 fasi è sempre più alto di quanto questa formula suggerisca: i risultati del calcolatore sono quindi prudenti per difetto.',
+    results_label:'Risultati',
+    r_oil:'Olio recuperato',r_oil_sub:'kg / stagione',
+    r_val:'Valore recuperato',r_val_sub:'€ / stagione',
+    r_roi:'ROI vs CAPEX',r_roi_sub:'% per stagione',
+    r_pb:'Payback',r_pb_sub:'stagioni',
+    bars_label:'Valore per prezzo olio — impianto attuale e Δ selezionato',
+    sens_label:'Sensitività al prezzo olio — impianto e Δ selezionati',
+    footnote:'ROI calcolato sul solo CAPEX. Sansa umida stimata come olive lavorate meno olio estratto (conservativa: il reale è 65–80% dell\'input olive nei sistemi a 2 fasi). Il recupero olio deriva esclusivamente dalla riduzione delle perdite da instabilità. Dati a scopo informativo; i risultati dipendono dalle condizioni specifiche dell\'impianto.',
+    v_bad:'Il payback supera 15 stagioni con questi parametri. Valutare un\'adozione aggregata (cooperativa, OP) piuttosto che l\'investimento del singolo impianto.',
+    v_great:'Payback inferiore a 1 stagione. Il sistema si ripaga nella prima campagna.',
+    v_good:'ROI solido — payback stimato in %s stagioni. Un investimento convincente al prezzo olio selezionato.',
+    v_warn:'ROI moderato — payback di %s stagioni. Richiede almeno una leva di controllo azionabile e una procedura di risposta agli allarmi.',
+    pb_seasons:'stagioni',
+  },
+  es:{
+    delta_max_label:'Δ máx',
+    delta_warn:'Δ máximo con este baseline: {MAX} pp (límite físico ~1,5%)',
+    pf_branches:'Sucursal de Singapur · Sucursal en Hungría',
+    branch_hu:'Sucursal en Hungría',
+    branch_sg:'Sucursal de Singapur',
+    detail_label:'Ver detalle del cálculo',
+    r_recovery_label:'↳ recuperable con IAS OLIV-IN',
+    r_floor_sub:'no recuperable',
+    r_floor:'Límite físico centrífuga (~1,5% HH)',
+    r_total_loss:'Aceite perdido en orujo (actual)',
+    moist_activate_hint:'Activa el selector para introducir la humedad real del orujo de tu almazara y obtener un cálculo más preciso.',
+    nir_m3:'Humedad',
+    nir_m2:'Grasa residual en materia seca',
+    nir_m1:'Grasa residual tal cual',
+    nir_box_title:'IAS OLIV-IN: mediciones continuas en línea',
+    form_ok:'¡Gracias! Tu cliente de correo se abrirá para enviar la solicitud.',
+    form_err_phone:'Introduce un número de teléfono válido.',
+    form_err_email:'Introduce una dirección de email válida.',
+    form_err_required:'Por favor completa todos los campos obligatorios.',
+    form_legal:'Los datos facilitados se utilizarán exclusivamente para responder a tu solicitud, conforme al RGPD.',
+    form_btn:'Enviar solicitud de información',
+    form_phone_hint:'con prefijo internacional',
+    form_phone:'Móvil * ',
+    form_email:'Email *',
+    form_surname:'Apellido *',
+    form_name:'Nombre *',
+    form_sub:'Déjanos tus datos — te contactaremos en menos de 24 horas.',
+    form_title:'¿Deseas recibir información sobre IAS OLIV-IN POMACE?',
+    office_hu_city:'Budapest (Europa)',
+    office_sg_city:'Singapur (Asia-Pacífico)',
+    moist_box_body:'Con humedad de orujo al {FRAC}%, masa estimada = <strong>{POMACE} kg</strong> ({FRAC}% del input) vs. {SIMPLE} kg sin corrección. Aceite recuperado a Δ = <strong>{OIL_KG} kg</strong>. Base {BASE_DM}% MS · Reducción {DELTA_DM} pp MS.',
+    moist_box_title:'Corrección por humedad activa',
+    moist_hint:'Rango típico 2 fases: 55–70% · media ~62%',
+    optional_tag:'opcional',
+    moist_label:'Humedad del orujo',
+    calc_intro_sub:'Retorno de la inversión para la compra de una solución NIR IAS Analysis — introduce los parámetros de tu almazara para obtener una estimación inmediata.',
+    calc_intro_title:'Calcula tu ROI NIR al instante',
+    why_q_p4:'Esos picos no son inevitables: son <strong>invisibles</strong>. Mientras no se miden, no se pueden controlar. El NIR los hace visibles en tiempo real, mientras ocurren. Lo que se vuelve visible, se vuelve mejorable.',
+    chart_leg_phys:'límite físico centrífuga',
+    chart_leg_avg:'media del turno',
+    chart_leg_wave:'fluctuación real',
+    chart_recover_label:'zona recuperable',
+    chart_phys_label:'límite físico ~2%',
+    chart_note:'',
+    chart_avg_label:'media de aceite perdido:',
+    chart_x:'tiempo (turno)',
+    chart_title:'Aceite residual en orujo sin monitorización NIR — fluctuación real durante un turno',
+    subtitle:'Calculadora ROI · sistemas de 2 fases · herramienta offline v1.1',
+    why_label:'Por qué se pierde aceite en el orujo — y por qué los operarios no lo ven o subestiman el impacto',
+    why_q_title:'La pregunta del escéptico',
+    why_q_p1:'Un almazarero puede creer que su sistema de extracción ya ha alcanzado el máximo de eficiencia. ¿Pero es realmente así?',
+    why_q_p2:'El problema no es la centrífuga. Es la <strong>estabilidad del proceso</strong>. La media tranquiliza, pero a menudo oculta lo que importa.',
+    why_q_p3:'Si durante un turno el aceite residual en el orujo oscila entre el 2% y el 5% HH — algo completamente normal — la media se sitúa en 3,5%. Pero durante horas se está trabajando a 4,5–5,0%. Ahí es donde se pierde mucho aceite. Y ahí es donde se puede recuperar.',
+    why_steps_title:'La cadena lógica — paso a paso',
+    why_s1:'La física de la centrífuga impone un límite estructural: aproximadamente 1,5–2,0% HH. Por debajo de ese umbral, la calidad se vería comprometida. Todo lo que está por encima — típicamente 0,5–1,5 pp más — depende de la inestabilidad operativa: variaciones de caudal, materia prima, balance hídrico, arranques y paradas.',
+    why_s2:'Sin monitorización continua, el operario no recibe ninguna señal. El proceso puede funcionar en condiciones subóptimas durante horas sin que nadie lo detecte. La media oculta los picos.',
+    why_s3:'IAS OLIV-IN, el sistema NIR en línea de IAS Analysis, mide el aceite residual de forma continua en la línea de descarga de la centrífuga. La lectura se muestra en el PLC o en pantalla. Cuando supera el umbral definido, el operario recibe una alarma y puede actuar sobre las palancas disponibles: agua de proceso, temperatura, caudal, velocidad de giro — según la configuración de la almazara.',
+    why_s4:'El resultado no es una centrífuga más eficiente, sino menos tiempo operando lejos del punto óptimo. La parte recuperable — 0,5–1,0 pp — corresponde exactamente al componente variable y controlable de las pérdidas. Cuanto más estable es el proceso, más se acerca al límite físico del sistema.',
+    mill_size_label:'Tamaño de la almazara — selección rápida',
+    prod_label:'Parámetros de producción',
+    vol_label:'Aceitunas procesadas por campaña (kg)',
+    yld_label:'Rendimiento medio en aceite (%)',
+    base_label:'Aceite residual en orujo tal cual (% HH)',
+    econ_label:'Parámetros económicos y NIR',
+    price_label:'Precio de venta del aceite (€/kg)',
+    capex_label:'CAPEX sistema NIR IAS Analysis (€)',
+    delta_label:'Reducción recuperable de pérdidas (pp tal cual)',
+    pomace_title:'El orujo en sistemas de 2 fases',
+    pomace_body:'En una centrífuga de 2 fases, el alpechín <strong>no se separa</strong> — permanece en el orujo. El orujo húmedo representa típicamente el <strong>65–80% del peso de la aceituna de entrada</strong> (vs. 25–35% en 3 fases), con humedad del 55–70%. La calculadora usa: <em>orujo húmedo ≈ aceitunas − aceite extraído</em> — estimación conservadora que subestima ligeramente la masa real. La proporción real orujo/aceituna en un sistema de 2 fases es siempre mayor de lo que esta fórmula indica, por lo que los resultados son conservadores por defecto.',
+    results_label:'Resultados',
+    r_oil:'Aceite recuperado',r_oil_sub:'kg / campaña',
+    r_val:'Valor recuperado',r_val_sub:'€ / campaña',
+    r_roi:'ROI vs CAPEX',r_roi_sub:'% por campaña',
+    r_pb:'Recuperación',r_pb_sub:'campañas',
+    bars_label:'Valor por precio de aceite — almazara y Δ seleccionados',
+    sens_label:'Sensibilidad al precio del aceite — almazara y Δ seleccionados',
+    footnote:'ROI calculado solo sobre el CAPEX. El orujo húmedo se estima como aceitunas menos aceite extraído (conservador: el real es 65–80% del input en sistemas de 2 fases). La ganancia de aceite proviene exclusivamente de reducir pérdidas por inestabilidad del proceso. Datos orientativos; los resultados dependen de las condiciones específicas de cada almazara.',
+    v_bad:'La recuperación supera 15 campañas. Considere adopción agrupada (cooperativa, OP) en lugar de inversión individual.',
+    v_great:'Recuperación inferior a 1 campaña. El sistema se amortiza en la primera cosecha.',
+    v_good:'ROI sólido — recuperación estimada en %s campañas. Una inversión convincente al precio de aceite seleccionado.',
+    v_warn:'ROI moderado — recuperación de %s campañas. Requiere al menos una palanca de control accionable y un procedimiento de respuesta a alarmas.',
+    pb_seasons:'campañas',
+  },
+  el:{
+    delta_max_label:'Δ μέγ',
+    delta_warn:'Μέγιστο Δ: {MAX} μ.μ. (φυσικό όριο ~1,5%)',
+    pf_branches:'Υποκατ. Σιγκαπούρης · Υποκατ. Ουγγαρίας',
+    branch_hu:'Υποκατ. Ουγγαρίας',
+    branch_sg:'Υποκατ. Σιγκαπούρης',
+    detail_label:'Λεπτομέρεια υπολογισμού',
+    r_recovery_label:'↳ ανακτήσιμο με IAS OLIV-IN',
+    r_floor_sub:'μη ανακτήσιμο',
+    r_floor:'Φυσικό όριο (~1,5% ΥΒ)',
+    r_total_loss:'Συνολικό λάδι στον πυρήνα (τώρα)',
+    moist_activate_hint:'Ενεργοποιήστε τον διακόπτη για να ορίσετε την πραγματική υγρασία του ελαιοπυρήνα και να λάβετε πιο ακριβή αποτέλεσμα.',
+    nir_m3:'Υγρασία',
+    nir_m2:'Υπολ. λίπος σε ξηρά βάση',
+    nir_m1:'Υπολ. λίπος ως έχει',
+    nir_box_title:'IAS OLIV-IN: συνεχείς μετρήσεις στη γραμμή',
+    form_ok:'Ευχαριστούμε! Το email σας θα ανοίξει για να αποστείλετε το αίτημα.',
+    form_err_phone:'Εισάγετε έναν έγκυρο αριθμό τηλεφώνου.',
+    form_err_email:'Εισάγετε μια έγκυρη διεύθυνση email.',
+    form_err_required:'Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία.',
+    form_legal:'Τα δεδομένα σας θα χρησιμοποιηθούν αποκλειστικά για να απαντήσουμε στο αίτημά σας, σύμφωνα με τον GDPR.',
+    form_btn:'Αποστολή αιτήματος πληροφοριών',
+    form_phone_hint:'με διεθνή κωδικό',
+    form_phone:'Κινητό * ',
+    form_email:'Email *',
+    form_surname:'Επώνυμο *',
+    form_name:'Όνομα *',
+    form_sub:'Αφήστε τα στοιχεία σας — θα επικοινωνήσουμε μαζί σας εντός 24 ωρών.',
+    form_title:'Θέλετε να λάβετε πληροφορίες για το IAS OLIV-IN POMACE;',
+    office_hu_city:'Βουδαπέστη (Ευρώπη)',
+    office_sg_city:'Σιγκαπούρη (Ασία-Ειρηνικός)',
+    moist_box_body:'Με υγρασία πυρήνα {FRAC}%, εκτιμώμενη μάζα πυρήνα = <strong>{POMACE} kg</strong> ({FRAC}% εισόδου ελιάς) έναντι {SIMPLE} kg χωρίς διόρθωση. Ανακτημένο λάδι σε Δ = <strong>{OIL_KG} kg</strong>. Βάση {BASE_DM}% ΞΒ · Μείωση {DELTA_DM} μ.μ. ΞΒ.',
+    moist_box_title:'Διόρθωση υγρασίας ενεργή',
+    moist_hint:'Τυπικό εύρος 2 φάσεων: 55–70% · μέσος ~62%',
+    optional_tag:'προαιρετικό',
+    moist_label:'Υγρασία ελαιοπυρήνα',
+    calc_intro_sub:'Απόδοση επένδυσης για την αγορά λύσης NIR IAS Analysis — εισάγετε τα στοιχεία του ελαιοτριβείου σας για άμεση εκτίμηση.',
+    calc_intro_title:'Υπολογίστε αμέσως την ΑΕΕ σας',
+    why_q_p4:'Αυτές οι κορυφές δεν είναι αναπόφευκτες: είναι <strong>αόρατες</strong>. Όσο δεν τις μετράτε, δεν τις ελέγχετε. Το NIR τις κάνει ορατές σε πραγματικό χρόνο, καθώς συμβαίνουν. Αυτό που γίνεται ορατό, γίνεται βελτιώσιμο.',
+    chart_leg_phys:'φυσικό όριο αποκεντρωτή',
+    chart_leg_avg:'μέσος βάρδιας',
+    chart_leg_wave:'πραγματική διακύμανση',
+    chart_recover_label:'ανακτήσιμη ζώνη',
+    chart_phys_label:'φυσικό όριο ~2%',
+    chart_note:'',
+    chart_avg_label:'μέσος όρος λαδιού που χάνεται:',
+    chart_x:'χρόνος (βάρδια)',
+    chart_title:'Υπολειπόμενο λάδι στον ελαιοπυρήνα χωρίς παρακολούθηση NIR — πραγματική διακύμανση ανά βάρδια',
+    subtitle:'Υπολογιστής ΑΕΕ · συστήματα 2 φάσεων · εργαλείο offline v1.1',
+    why_label:'Γιατί χάνεται λάδι στον ελαιοπυρήνα — και γιατί οι χειριστές δεν το αντιλαμβάνονται ή υποτιμούν τον αντίκτυπο',
+    why_q_title:'Η ερώτηση του σκεπτικού',
+    why_q_p1:'Ένας ελαιοποιός μπορεί να πιστεύει ότι το σύστημα εκχύλισής του έχει φτάσει ήδη στη μέγιστη αποδοτικότητα. Αλλά είναι πραγματικά έτσι;',
+    why_q_p2:'Το πρόβλημα δεν είναι ο αποκεντρωτής. Είναι η <strong>σταθερότητα της διαδικασίας</strong>. Ο μέσος όρος καθησυχάζει, αλλά συχνά κρύβει αυτό που μετράει.',
+    why_q_p3:'Αν κατά τη διάρκεια μιας βάρδιας το υπολειπόμενο λάδι στον ελαιοπυρήνα κυμαίνεται μεταξύ 2% και 5% ΥΒ — κάτι απολύτως φυσιολογικό — ο μέσος σταματά στο 3,5%. Όμως για ώρες λειτουργείτε στο 4,5–5,0%. Εκεί χάνεται πολύ λάδι. Και εκεί μπορείτε να το ανακτήσετε.',
+    why_steps_title:'Η λογική αλυσίδα — βήμα προς βήμα',
+    why_s1:'Η φυσική του αποκεντρωτή επιβάλλει ένα δομικό κατώτατο όριο: περίπου 1,5–2,0% ΥΒ. Κάτω από αυτό η ποιότητα διακυβεύεται. Ό,τι βρίσκεται πάνω — συνήθως 0,5–1,5 μ.μ. επιπλέον — οφείλεται στην επιχειρησιακή αστάθεια: μεταβολές παροχής, ποιότητα πρώτης ύλης, ανισορροπία νερού, διακοπές-επαναλήψεις.',
+    why_s2:'Χωρίς συνεχή παρακολούθηση, ο χειριστής δεν λαμβάνει κανένα σήμα. Η διαδικασία μπορεί να λειτουργεί σε μη βέλτιστες συνθήκες για ώρες χωρίς κανείς να το αντιληφθεί. Ο μέσος όρος αποκρύπτει τις κορυφές.',
+    why_s3:'Το IAS OLIV-IN, το inline NIR σύστημα της IAS Analysis, μετρά το υπολειπόμενο λάδι συνεχώς στη γραμμή εκφόρτωσης του αποκεντρωτή. Η ένδειξη εμφανίζεται σε PLC ή οθόνη. Όταν υπερβεί το καθορισμένο κατώφλι, ο χειριστής λαμβάνει συναγερμό και μπορεί να επέμβει στους διαθέσιμους μοχλούς: νερό διεργασίας, θερμοκρασία, παροχή, στροφές — ανάλογα με τη διαμόρφωση.',
+    why_s4:'Το αποτέλεσμα δεν είναι ένας πιο αποδοτικός αποκεντρωτής, αλλά λιγότερος χρόνος λειτουργίας μακριά από το βέλτιστο σημείο. Το ανακτήσιμο μέρος — 0,5–1,0 μ.μ. — αντιστοιχεί ακριβώς στη μεταβλητή και ελεγχόμενη συνιστώσα των απωλειών. Όσο πιο σταθερή η διαδικασία, τόσο πλησιέστερα στο φυσικό όριο του συστήματος.',
+    mill_size_label:'Μέγεθος ελαιοτριβείου — γρήγορη επιλογή',
+    prod_label:'Παράμετροι παραγωγής',
+    vol_label:'Ελιές που επεξεργάστηκαν ανά σεζόν (kg)',
+    yld_label:'Μέση απόδοση σε λάδι (%)',
+    base_label:'Υπολειπόμενο λάδι στον πυρήνα ως έχει (% ΥΒ)',
+    econ_label:'Οικονομικές παράμετροι & NIR',
+    price_label:'Τιμή πώλησης λαδιού (€/kg)',
+    capex_label:'CAPEX συστήματος NIR IAS Analysis (€)',
+    delta_label:'Ανακτήσιμη μείωση απωλειών (μ.μ. ως έχει)',
+    pomace_title:'Ο ελαιοπυρήνας στα συστήματα 2 φάσεων',
+    pomace_body:'Σε αποκεντρωτή 2 φάσεων, τα βλαστικά νερά <strong>δεν διαχωρίζονται</strong> — παραμένουν στον πυρήνα. Ο υγρός ελαιοπυρήνας αντιπροσωπεύει τυπικά το <strong>65–80% του βάρους ελιάς εισόδου</strong> (έναντι 25–35% στα 3-φασικά), με υγρασία 55–70%. Ο υπολογιστής χρησιμοποιεί: <em>υγρός πυρήνας ≈ ελιές − λάδι που εξήχθη</em> — συντηρητική εκτίμηση που ελαφρώς υποεκτιμά την πραγματική μάζα. Ο πραγματικός λόγος πυρήνα/ελιάς σε σύστημα 2 φάσεων είναι πάντα μεγαλύτερος, άρα τα αποτελέσματα είναι συντηρητικά.',
+    results_label:'Αποτελέσματα',
+    r_oil:'Λάδι που ανακτήθηκε',r_oil_sub:'kg / σεζόν',
+    r_val:'Ανακτημένη αξία',r_val_sub:'€ / σεζόν',
+    r_roi:'ΑΕΕ vs CAPEX',r_roi_sub:'% ανά σεζόν',
+    r_pb:'Αποπληρωμή',r_pb_sub:'σεζόν',
+    bars_label:'Αξία ανά τιμή λαδιού — επιλεγμένο ελαιοτριβείο & Δ',
+    sens_label:'Ευαισθησία στην τιμή λαδιού — ελαιοτριβείο & Δ',
+    footnote:'Ο ΑΕΕ υπολογίζεται μόνο επί CAPEX. Ο υγρός πυρήνας εκτιμάται ως ελιές μείον λάδι (συντηρητικό: το πραγματικό είναι 65–80% της εισόδου). Τα δεδομένα έχουν πληροφοριακό χαρακτήρα.',
+    v_bad:'Η αποπληρωμή υπερβαίνει 15 σεζόν. Εξετάστε ομαδική υιοθέτηση (συνεταιρισμός) αντί ατομικής επένδυσης.',
+    v_great:'Αποπληρωμή κάτω από 1 σεζόν. Το σύστημα αποσβένεται στην πρώτη εσοδεία.',
+    v_good:'Ισχυρός ΑΕΕ — αποπληρωμή %s σεζόν. Συμφέρουσα επένδυση στην επιλεγμένη τιμή λαδιού.',
+    v_warn:'Μέτριος ΑΕΕ — αποπληρωμή %s σεζόν. Απαιτεί τουλάχιστον έναν αξιοποιήσιμο μοχλό ελέγχου.',
+    pb_seasons:'σεζόν',
+  },
+  fr:{
+    delta_max_label:'Δ max',
+    delta_warn:'Δ max récupérable à ce baseline : {MAX} pp (limite physique ~1,5%)',
+    pf_branches:'Filiale de Singapour · Filiale en Hongrie',
+    branch_hu:'Filiale en Hongrie',
+    branch_sg:'Filiale de Singapour',
+    detail_label:'Afficher le détail du calcul',
+    r_recovery_label:'↳ récupérable avec IAS OLIV-IN',
+    r_floor_sub:'non récupérable',
+    r_floor:'Limite physique décanteur (~1,5% MB)',
+    r_total_loss:'Huile perdue dans le grignon (actuelle)',
+    moist_activate_hint:'Activez le sélecteur pour saisir l\'humidité réelle du grignon de votre moulin et obtenir un calcul plus précis.',
+    nir_m3:'Humidité',
+    nir_m2:'Matière grasse résiduelle sur matière sèche',
+    nir_m1:'Matière grasse résiduelle telle quelle',
+    nir_box_title:'IAS OLIV-IN : mesures continues en ligne',
+    form_ok:'Merci ! Votre client email s\'ouvrira pour envoyer la demande.',
+    form_err_phone:'Veuillez saisir un numéro de téléphone valide.',
+    form_err_email:'Veuillez saisir une adresse email valide.',
+    form_err_required:'Veuillez remplir tous les champs obligatoires.',
+    form_legal:'Vos données seront utilisées uniquement pour répondre à votre demande, conformément au RGPD.',
+    form_btn:'Envoyer une demande d\'information',
+    form_phone_hint:'avec indicatif international',
+    form_phone:'Mobile * ',
+    form_email:'Email *',
+    form_surname:'Nom *',
+    form_name:'Prénom *',
+    form_sub:'Laissez vos coordonnées — nous vous recontacterons dans les 24 heures.',
+    form_title:'Vous souhaitez recevoir des informations sur IAS OLIV-IN POMACE ?',
+    office_hu_city:'Budapest (Europe)',
+    office_sg_city:'Singapour (Asie-Pacifique)',
+    moist_box_body:'Avec une humidité de grignon à {FRAC}%, masse estimée = <strong>{POMACE} kg</strong> ({FRAC}% de l\'entrée olives) vs. {SIMPLE} kg sans correction. Huile récupérée à Δ = <strong>{OIL_KG} kg</strong>. Base {BASE_DM}% MS · Réduction {DELTA_DM} pp MS.',
+    moist_box_title:'Correction humidité active',
+    moist_hint:'Plage typique 2 phases : 55–70% · moyenne ~62%',
+    optional_tag:'optionnel',
+    moist_label:'Humidité du grignon',
+    calc_intro_sub:'Retour sur investissement pour l\'achat d\'une solution NIR IAS Analysis — saisissez les paramètres de votre moulin pour une estimation immédiate.',
+    calc_intro_title:'Calculez votre ROI NIR immédiatement',
+    why_q_p4:'Ces pics ne sont pas inévitables : ils sont <strong>invisibles</strong>. Tant qu\'on ne les mesure pas, on ne les contrôle pas. Le NIR les rend visibles en temps réel, au moment où ils se produisent. Ce qui devient visible devient améliorable.',
+    chart_leg_phys:'limite physique décanteur',
+    chart_leg_avg:'moyenne du poste',
+    chart_leg_wave:'fluctuation réelle',
+    chart_recover_label:'zone récupérable',
+    chart_phys_label:'limite physique ~2%',
+    chart_note:'',
+    chart_avg_label:'moyenne d\'huile perdue :',
+    chart_x:'temps (poste)',
+    chart_title:'Huile résiduelle dans le grignon sans surveillance NIR — fluctuation réelle au cours d\'un poste',
+    subtitle:'Calculateur ROI · systèmes 2 phases · outil hors ligne v1.1',
+    why_label:'Pourquoi de l\'huile est perdue dans le grignon — et pourquoi les opérateurs ne le voient pas ou sous-estiment l\'impact',
+    why_q_title:'La question du sceptique',
+    why_q_p1:'Un moulinier peut penser que son système d\'extraction a déjà atteint son maximum d\'efficacité. Mais est-ce vraiment le cas?',
+    why_q_p2:'Le problème n\'est pas le décanteur. C\'est la <strong>stabilité du procédé</strong>. La moyenne est rassurante — mais elle cache souvent ce qui compte vraiment.',
+    why_q_p3:'Si au cours d\'un poste l\'huile résiduelle dans le grignon oscille entre 2% et 5% MB — ce qui est tout à fait normal — la moyenne s\'établit à 3,5%. Mais pendant des heures, on travaille à 4,5–5,0%. C\'est là que l\'on perd beaucoup d\'huile. Et c\'est là que l\'on peut la récupérer.',
+    why_steps_title:'La chaîne logique — étape par étape',
+    why_s1:'La physique du décanteur impose un plancher structurel : environ 1,5–2,0% MB. En dessous, la qualité serait compromise. Tout ce qui est au-dessus — typiquement 0,5–1,5 pp de plus — résulte d\'une instabilité opérationnelle : variations de débit, qualité de la matière première, déséquilibre hydrique, arrêts-démarrages.',
+    why_s2:'Sans surveillance continue, l\'opérateur ne reçoit aucun signal. Le procédé peut fonctionner en conditions sous-optimales pendant des heures sans que personne ne s\'en aperçoive. La moyenne masque les pics.',
+    why_s3:'IAS OLIV-IN, le système NIR en ligne d\'IAS Analysis, mesure l\'huile résiduelle en continu sur la ligne de décharge du décanteur. La valeur est affichée sur l\'automate ou l\'écran. Lorsqu\'elle dépasse le seuil défini, l\'opérateur reçoit une alarme et peut agir sur les leviers disponibles : eau de procédé, température, débit, vitesse de rotation — selon la configuration du moulin.',
+    why_s4:'Le résultat n\'est pas un décanteur plus performant, mais moins de temps passé à fonctionner loin du point optimal. La part récupérable — 0,5–1,0 pp — correspond exactement à la composante variable et contrôlable des pertes. Plus le procédé est stable, plus on se rapproche de la limite physique du système.',
+    mill_size_label:'Taille du moulin — sélection rapide',
+    prod_label:'Paramètres de production',
+    vol_label:'Olives traitées par campagne (kg)',
+    yld_label:'Rendement moyen en huile (%)',
+    base_label:'Huile résiduelle dans le grignon tel quel (% MB)',
+    econ_label:'Paramètres économiques & NIR',
+    price_label:'Prix de vente de l\'huile (€/kg)',
+    capex_label:'CAPEX système NIR IAS Analysis (€)',
+    delta_label:'Réduction récupérable des pertes (pp tel quel)',
+    pomace_title:'Le grignon dans les systèmes 2 phases',
+    pomace_body:'Dans un décanteur 2 phases, les eaux de végétation <strong>ne sont pas séparées</strong> — elles restent dans le grignon. Le grignon humide représente typiquement <strong>65–80% du poids des olives en entrée</strong> (vs. 25–35% en 3 phases), avec une humidité de 55–70%. La calculatrice utilise : <em>grignon humide ≈ olives − huile extraite</em> — estimation conservatrice qui sous-estime légèrement la masse réelle. Le rapport réel grignon/olives dans un système 2 phases est toujours supérieur à ce que cette formule indique, les résultats sont donc conservateurs par défaut.',
+    results_label:'Résultats',
+    r_oil:'Huile récupérée',r_oil_sub:'kg / campagne',
+    r_val:'Valeur récupérée',r_val_sub:'€ / campagne',
+    r_roi:'ROI vs CAPEX',r_roi_sub:'% par campagne',
+    r_pb:'Retour sur invest.',r_pb_sub:'campagnes',
+    bars_label:'Valeur par prix d\'huile — moulin et Δ sélectionnés',
+    sens_label:'Sensibilité au prix de l\'huile — moulin et Δ sélectionnés',
+    footnote:'ROI calculé sur le CAPEX uniquement. Le grignon humide est estimé comme olives moins huile extraite (conservateur : le réel est 65–80% de l\'entrée en 2 phases). Le gain d\'huile provient exclusivement de la réduction des pertes d\'instabilité. Données à titre indicatif.',
+    v_bad:'Le retour dépasse 15 campagnes. Envisagez une adoption groupée (coopérative, OP) plutôt qu\'un investissement individuel.',
+    v_great:'Retour inférieur à 1 campagne. Le système est amorti dès la première récolte.',
+    v_good:'ROI solide — retour estimé à %s campagnes. Une investissement convaincant au prix d\'huile sélectionné.',
+    v_warn:'ROI modéré — retour de %s campagnes. Nécessite au moins un levier de contrôle actionnable et une procédure de réponse aux alarmes.',
+    pb_seasons:'campagnes',
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const t = T[lang];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  calc();
+}
+
+const fmt  = n => Math.round(n).toLocaleString('en-US');
+const fmtE = n => '€' + Math.round(n).toLocaleString('en-US');
+const ff   = (n, d=1) => n.toFixed(d);
+
+function setC(vol, yld, base, btn) {
+  document.getElementById('vol').value  = vol;
+  document.getElementById('yld').value  = yld;
+  document.getElementById('base').value = base;
+  document.querySelectorAll('.clu').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  calc();
+}
+
+function toggleMoist() {
+  const on = document.getElementById('moistToggle').checked;
+  document.getElementById('moistSliderWrap').style.display = on ? 'block' : 'none';
+  document.getElementById('moistO').textContent = on ? ff(+document.getElementById('moist').value) + '%' : '—';
+  calc();
+}
+
+function calc() {
+  const t     = T[currentLang];
+  const vol   = +document.getElementById('vol').value;
+  const yld   = +document.getElementById('yld').value;
+  const base  = +document.getElementById('base').value;
+  const price = +document.getElementById('price').value;
+  const capex = +document.getElementById('capex').value;
+  const delta = +document.getElementById('delta').value;
+  const moistOn = document.getElementById('moistToggle').checked;
+  const moist = moistOn ? +document.getElementById('moist').value : null;
+
+  // Display values
+  const sep = currentLang === 'en' ? ',' : '.';
+  document.getElementById('vO').textContent = fmt(vol) + ' kg';
+  document.getElementById('yO').textContent = ff(yld) + '%';
+  document.getElementById('bO').textContent = ff(base) + '% WM';
+  document.getElementById('pO').textContent = '€' + ff(price) + '/kg';
+  document.getElementById('cO').textContent = fmtE(capex);
+  document.getElementById('dO').textContent = ff(delta) + ' pp';
+  if (moistOn) document.getElementById('moistO').textContent = ff(moist) + '%';
+
+  // ── POMACE MASS CALCULATION ──────────────────────────────────────────────
+  // Simplified (no moisture): pomace ≈ olives − oil extracted
+  const pomaceSimple = vol * (1 - yld / 100);
+
+  // With moisture: real pomace WM is larger because vegetation water is retained.
+  // Industry data for 2-phase systems:
+  //   moisture 55% → pomace ≈ 65% of olive input
+  //   moisture 62% → pomace ≈ 72% of olive input
+  //   moisture 70% → pomace ≈ 80% of olive input
+  // Linear model: pomace_fraction = 0.50 + (moist - 40) * 0.01
+  let pomaceWM, pomaceMethod;
+  if (moistOn && moist) {
+    const fraction = Math.min(0.85, Math.max(0.55, 0.50 + (moist - 40) * 0.01));
+    pomaceWM = vol * fraction;
+    pomaceMethod = 'moisture';
+  } else {
+    pomaceWM = pomaceSimple;
+    pomaceMethod = 'simple';
+  }
+
+  // ── PHYSICAL FLOOR & DELTA CONSTRAINT ───────────────────────────────────
+  var PHYS_FLOOR = 1.5;
+  var maxDelta   = Math.max(0, +(base - PHYS_FLOOR).toFixed(1));
+  var deltaEff   = Math.min(delta, maxDelta);
+
+  // Clamp slider max
+  var dSlider = document.getElementById('delta');
+  if (dSlider) {
+    var newMax = Math.max(0.2, maxDelta);
+    if (Math.abs(+dSlider.max - newMax) > 0.05) dSlider.max = newMax.toFixed(1);
+    if (+dSlider.value > newMax) dSlider.value = newMax.toFixed(1);
+  }
+  document.getElementById('dO').textContent = ff(deltaEff) + ' pp' + (deltaEff < delta - 0.05 ? ' (' + (T[currentLang].delta_max_label||'max') + ')' : '');
+
+  // Warn if clamped
+  var dWarnEl = document.getElementById('deltaWarn');
+  if (dWarnEl) {
+    if (deltaEff < delta - 0.05) {
+      var wmsg = (T[currentLang].delta_warn || 'Max {MAX} pp').replace('{MAX}', ff(maxDelta));
+      dWarnEl.textContent = wmsg;
+      dWarnEl.style.display = 'block';
+    } else {
+      dWarnEl.style.display = 'none';
+    }
+  }
+
+  // Total oil currently lost, physical floor loss, recoverable
+  var oilLostTotal = pomaceWM * (base / 100);
+  var oilFloor     = pomaceWM * (PHYS_FLOOR / 100);
+  var oilKg        = pomaceWM * (deltaEff / 100);
+
+  // Update loss context cards
+  var rTLK = document.getElementById('rTotalLossKg');
+  var rTLE = document.getElementById('rTotalLossEur');
+  var rFLK = document.getElementById('rFloorKg');
+  if (rTLK) rTLK.textContent = fmt(oilLostTotal) + ' kg';
+  if (rTLE) rTLE.textContent = '€' + fmt(oilLostTotal * price) + ' / stagione';
+  if (rFLK) rFLK.textContent = fmt(oilFloor) + ' kg';
+
+  // On DM basis
+  var baseDM  = (moistOn && moist) ? +(base  / (1 - moist/100)).toFixed(1) : null;
+  var deltaDM = (moistOn && moist) ? +(deltaEff / (1 - moist/100)).toFixed(2) : null;
+  var valEur = oilKg * price;
+  const roi    = valEur / capex * 100;
+  const pb     = capex / Math.max(valEur, 0.01);
+  const pbStr  = pb > 50 ? '> 50' : ff(pb);
+
+  document.getElementById('rOil').textContent = fmt(oilKg);
+  // Show pomace mass info in verdict area when moisture is active
+  const moistInfo = (moistOn && moist) ?
+    ' [' + t.moist_method_label + ': ' + fmt(pomaceWM) + ' kg ' + t.pomace_wm_label + ', ' +
+    ff(baseDM) + '% ' + t.dm_label + ']' : '';
+
+  const vEl = document.getElementById('rVal');
+  vEl.textContent = fmtE(valEur);
+  vEl.className = 'rc-val' + (roi > 100 ? ' good' : roi > 40 ? ' warn' : ' bad');
+
+  const rEl = document.getElementById('rROI');
+  rEl.textContent = ff(roi, 0) + '%';
+  rEl.className = 'rc-val' + (roi > 100 ? ' good' : roi > 40 ? ' warn' : ' bad');
+
+  const pEl = document.getElementById('rPB');
+  pEl.textContent = pbStr;
+  pEl.className = 'rc-val' + (pb < 2 ? ' good' : pb < 5 ? ' warn' : ' bad');
+
+  const vd = document.getElementById('verdict');
+  let vc, vt;
+  if (pb > 15)    { vc = 'bad';  vt = t.v_bad; }
+  else if (pb < 1){ vc = 'good'; vt = t.v_great; }
+  else if (pb < 2.5){ vc = 'good'; vt = t.v_good.replace('%s', pbStr); }
+  else            { vc = 'warn'; vt = t.v_warn.replace('%s', pbStr); }
+  vd.className = 'verdict ' + vc;
+  vd.textContent = vt;
+  // Moisture info box
+  let moistBox = document.getElementById('moistInfoBox');
+  if (moistOn && moist) {
+    if (!moistBox) {
+      moistBox = document.createElement('div');
+      moistBox.id = 'moistInfoBox';
+      moistBox.style.cssText = 'background:#f0f4ff;border:1px solid #c5d2f0;border-left:3px solid #3a5fbf;border-radius:0 6px 6px 0;padding:11px 16px;font-size:12px;color:#2a3d7a;line-height:1.7;margin-bottom:18px';
+      vd.parentNode.insertBefore(moistBox, vd.nextSibling);
+    }
+    const fraction = Math.min(0.85, Math.max(0.55, 0.50 + (moist - 40) * 0.01));
+    moistBox.innerHTML =
+      '<strong style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:5px;color:#1e2e60">' + (t.moist_box_title || 'Moisture correction active') + '</strong>' +
+      (t.moist_box_body || 'Pomace mass')
+        .replace('{FRAC}', ff(fraction * 100, 0))
+        .replace('{POMACE}', fmt(pomaceWM))
+        .replace('{SIMPLE}', fmt(pomaceSimple))
+        .replace('{OIL_KG}', fmt(oilKg))
+        .replace('{BASE_DM}', ff(baseDM))
+        .replace('{DELTA_DM}', ff(deltaDM, 2));
+  } else if (moistBox) {
+    moistBox.remove();
+  }
+
+  const prices = [6, 8, 10, 12];
+  const maxB = Math.max(...prices.map(p => pomaceWM * (delta / 100) * p), capex, 1);
+  document.getElementById('bars').innerHTML = prices.map(p => {
+    const v   = pomaceWM * (delta / 100) * p;
+    const pct = (Math.max(0, v) / maxB * 100).toFixed(1);
+    const col = v >= capex ? '#1a6b3e' : v > capex * 0.5 ? '#8a6200' : '#8b2424';
+    return `<div class="bar-row">
+      <div class="bar-label">Δ ${ff(delta)} pp · €${p}/kg</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${col}"></div></div>
+      <div class="bar-amount">${fmtE(v)}</div>
+    </div>`;
+  }).join('') + `<div class="bar-row">
+    <div class="bar-label" style="color:#aaa">CAPEX</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${(capex/maxB*100).toFixed(1)}%;background:#c8d8c5"></div></div>
+    <div class="bar-amount" style="color:#aaa">${fmtE(capex)}</div>
+  </div>`;
+
+  document.getElementById('sens').innerHTML = prices.map(p => {
+    const v   = pomaceWM * (delta / 100) * p;
+    const pb2 = ff(capex / Math.max(v, 0.01));
+    const isOn = (p===6&&price<=6.5)||(p===8&&price>6.5&&price<=8.5)||(p===10&&price>8.5&&price<=10.5)||(p===12&&price>10.5);
+    return `<div class="si${isOn?' on':''}">
+      <div class="si-price">€${p}/kg</div>
+      <div class="si-val">${fmtE(v)}</div>
+      <div class="si-pb">${t.pb_seasons}: ${pb2}</div>
+    </div>`;
+  }).join('');
+  updateDetail(vol,yld,base,price,capex,delta,pomaceWM,oilKg,valEur,roi,pb);
+}
+
+
+function submitForm() {
+  const t = T[currentLang];
+  const name    = document.getElementById('cf_name').value.trim();
+  const surname = document.getElementById('cf_surname').value.trim();
+  const email   = document.getElementById('cf_email').value.trim();
+  const prefix  = document.getElementById('cf_prefix').value;
+  const phone   = document.getElementById('cf_phone').value.trim();
+  const msg     = document.getElementById('formMsg');
+
+  const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  const phoneOk = phone.length >= 6;
+
+  if (!name || !surname || !email || !phone) {
+    msg.className = 'form-msg err';
+    msg.textContent = t.form_err_required || 'Compila tutti i campi obbligatori.';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!emailOk) {
+    msg.className = 'form-msg err';
+    msg.textContent = t.form_err_email || 'Inserisci un indirizzo email valido.';
+    msg.style.display = 'block';
+    return;
+  }
+  if (!phoneOk) {
+    msg.className = 'form-msg err';
+    msg.textContent = t.form_err_phone || 'Inserisci un numero di cellulare valido.';
+    msg.style.display = 'block';
+    return;
+  }
+
+  const fullPhone = prefix + ' ' + phone;
+  const subject = 'IAS OLIV-IN POMACE - Info Request';
+  const body = encodeURIComponent(
+    'Name: ' + name + ' ' + surname + '\n' +
+    'Email: ' + email + '\n' +
+    'Phone: ' + fullPhone + '\n\n' +
+    'IAS OLIV-IN POMACE - Information Request'
+  );
+  window.location.href = 'mailto:service@ias-glb.com?subject=' +
+    encodeURIComponent(subject) + '&body=' + body;
+
+  msg.className = 'form-msg ok';
+  msg.textContent = t.form_ok || 'Thank you! Your email client will open to send the request.';
+  msg.style.display = 'block';
+}
+
+
+function updateDetail(vol, yld, base, price, capex, delta, pomaceWM, oilKg, valEur, roi, pb) {
+  var body = document.getElementById('calcDetailBody');
+  if (!body) return;
+  var lang = currentLang;
+  var f  = function(n) { return Math.round(n).toLocaleString('en-US'); };
+  var ff2 = function(n,d) { return n.toFixed(d||1); };
+  var PHYS = 1.5;
+  var dEff = Math.min(delta, Math.max(0, base - PHYS));
+  var pbStr = pb > 50 ? '> 50' : ff2(pb);
+  var L = {
+    s1:{en:'Olives processed',it:'Olive lavorate',es:'Aceitunas procesadas',el:'Ελιές',fr:'Olives traitées'},
+    s2:{en:'Wet pomace',it:'Sansa umida',es:'Orujo húmedo',el:'Υγρός πυρήνας',fr:'Grignon humide'},
+    s3:{en:'Total oil lost (current)',it:'Olio totale perso (attuale)',es:'Aceite total perdido',el:'Συνολ. λάδι χαμένο',fr:'Huile totale perdue'},
+    s4:{en:'Physical floor (~1.5% WM)',it:'Limite fisico (~1,5% WM)',es:'Límite físico (~1,5%)',el:'Φυσικό όριο (~1,5%)',fr:'Plancher physique (~1,5%)'},
+    s5:{en:'Recoverable reduction',it:'Riduzione recuperabile',es:'Reducción recuperable',el:'Ανακτήσιμη μείωση',fr:'Réduction récupérable'},
+    s6:{en:'Oil recovered',it:'Olio recuperato',es:'Aceite recuperado',el:'Ανακτημένο λάδι',fr:'Huile récupérée'},
+    s7:{en:'Economic value',it:'Valore economico',es:'Valor económico',el:'Οικονομική αξία',fr:'Valeur économique'},
+    s8:{en:'Payback',it:'Payback',es:'Recuperación',el:'Αποπληρωμή',fr:'Retour'},
+    seas:{en:'seasons',it:'stagioni',es:'campañas',el:'σεζόν',fr:'campagnes'},
+    note:{en:'Simplified: pomace ≈ olives − oil extracted. In 2-phase systems the real pomace mass is 65–80% of olive input — so this is a conservative estimate.',
+          it:'Sansa ≈ olive − olio estratto. Nei sistemi a 2 fasi la sansa reale è il 65–80% delle olive in ingresso — il calcolo è quindi conservativo.',
+          es:'Orujo ≈ aceitunas − aceite. En 2 fases, el orujo real es el 65–80% de las aceitunas — cálculo conservador.',
+          el:'Πυρήνας ≈ ελιές − λάδι. Σε 2-φασικά ο πραγματικός πυρήνας είναι 65–80% εισόδου ελιών — εκτίμηση συντηρητική.',
+          fr:'Grignon ≈ olives − huile. En 2 phases, le grignon réel représente 65–80% des olives — estimation conservatrice.'}
+  };
+  var g = function(k){ return L[k][lang]||L[k]['en']; };
+  var oilTotal = pomaceWM*(base/100);
+  var oilF     = pomaceWM*(PHYS/100);
+  body.innerHTML =
+    '<div class="cd-step"><div class="cd-num">1</div><div class="cd-text"><strong>'+g('s1')+':</strong> '+f(vol)+' kg' +
+      '<span class="cd-formula">resa '+ff2(yld)+'% → olio estratto = '+f(vol*yld/100)+' kg</span></div></div>' +
+    '<div class="cd-step"><div class="cd-num">2</div><div class="cd-text"><strong>'+g('s2')+':</strong>' +
+      '<span class="cd-formula">'+f(vol)+' − '+f(vol*yld/100)+' = '+f(pomaceWM)+' kg</span>' +
+      '<span class="cd-note">'+g('note')+'</span></div></div>' +
+    '<hr class="cd-divider">' +
+    '<div class="cd-step"><div class="cd-num">3</div><div class="cd-text"><strong>'+g('s3')+':</strong>' +
+      '<span class="cd-formula">'+f(pomaceWM)+' kg × '+ff2(base)+'% = <strong>'+f(oilTotal)+' kg (€'+f(oilTotal*price)+')</strong></span></div></div>' +
+    '<div class="cd-step"><div class="cd-num">4</div><div class="cd-text"><strong>'+g('s4')+':</strong>' +
+      '<span class="cd-formula">'+f(pomaceWM)+' kg × '+PHYS+'% = '+f(oilF)+' kg (non recuperabile)</span></div></div>' +
+    '<div class="cd-step"><div class="cd-num">5</div><div class="cd-text"><strong>'+g('s5')+':</strong> Δ = '+ff2(dEff)+' pp' +
+      '<span class="cd-formula">'+f(pomaceWM)+' kg × '+ff2(dEff)+'% = <strong>'+f(oilKg)+' kg</strong></span></div></div>' +
+    '<div class="cd-step"><div class="cd-num">6</div><div class="cd-text"><strong>'+g('s7')+':</strong>' +
+      '<span class="cd-formula">'+f(oilKg)+' kg × €'+ff2(price)+'/kg = <span class="cd-result">€'+f(valEur)+'</span></span></div></div>' +
+    '<div class="cd-step"><div class="cd-num">7</div><div class="cd-text"><strong>'+g('s8')+':</strong>' +
+      '<span class="cd-formula">€'+f(capex)+' ÷ €'+f(valEur)+'/ann = <strong>'+pbStr+' '+g('seas')+'</strong></span></div></div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var lb = document.getElementById('langBar');
+  if (lb) {
+    lb.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-lang]');
+      if (!btn) return;
+      currentLang = btn.getAttribute('data-lang');
+      document.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var t = T[currentLang];
+      document.querySelectorAll('[data-t]').forEach(function(el){
+        var key = el.getAttribute('data-t');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      calc();
+    });
+  }
+  var cb = document.getElementById('clusterBtns');
+  if (cb) {
+    cb.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-vol]');
+      if (!btn) return;
+      document.getElementById('vol').value  = btn.getAttribute('data-vol');
+      document.getElementById('yld').value  = btn.getAttribute('data-yld');
+      document.getElementById('base').value = btn.getAttribute('data-base');
+      document.querySelectorAll('.clu').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      calc();
+    });
+  }
+  ['vol','yld','base','price','capex','delta','moist'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', calc);
+  });
+  var mt = document.getElementById('moistToggle');
+  if (mt) mt.addEventListener('change', toggleMoist);
+  var sb = document.getElementById('sendBtn');
+  if (sb) sb.addEventListener('click', submitForm);
+  calc();
+});
+
+</script>
+</body>
+</html>
